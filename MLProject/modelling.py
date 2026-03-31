@@ -29,7 +29,10 @@ model.fit(X_train, y_train)
 
 y_pred = model.predict(X_test)
 
-rmse = mean_squared_error(y_test, y_pred, squared=False)
+import numpy as np
+
+mse = mean_squared_error(y_test, y_pred)
+rmse = np.sqrt(mse)False)
 
 # Logging ke MLflow
 mlflow.log_param("model_type", "LinearRegression")
