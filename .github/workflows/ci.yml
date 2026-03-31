@@ -21,7 +21,7 @@ jobs:
         cd MLProject
         mlflow run .
 
-    - uses: actions/upload-artifact@v3
+    - uses: - uses: actions/upload-artifact@v4
       with:
         name: model
         path: MLProject/mlruns
