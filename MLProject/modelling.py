@@ -21,9 +21,6 @@ X_train, X_test, y_train, y_test = train_test_split(
 # Model
 model = LinearRegression()
 
-# MLflow
-mlflow.set_experiment("House Price Prediction")
-
 model.fit(X_train, y_train)
 
 y_pred = model.predict(X_test)
