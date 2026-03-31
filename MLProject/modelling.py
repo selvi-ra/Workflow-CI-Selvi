@@ -8,29 +8,33 @@ import mlflow.sklearn
 # Load dataset
 data = pd.read_csv("house_preprocessing.csv")
 
-# Misal targetnya SalePrice (sesuaikan kalau beda)
+# Misal targetnya SalePrice
 X = data.drop("SalePrice", axis=1)
 y = data["SalePrice"]
 
 # Split data
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
 
 # Model
 model = LinearRegression()
 
-# MLflow tracking
+# Set experiment
 mlflow.set_experiment("House Price Prediction")
 
-with mlflow.start_run():
-    model.fit(X_train, y_train)
+# MLflow Project (mlflow run .) sudah handle run otomatis
 
-    y_pred = model.predict(X_test)
+model.fit(X_train, y_train)
 
-    rmse = mean_squared_error(y_test, y_pred, squared=False)
+y_pred = model.predict(X_test)
 
-    mlflow.log_param("model_type", "LinearRegression")
-    mlflow.log_metric("rmse", rmse)
+rmse = mean_squared_error(y_test, y_pred, squared=False)
 
-    mlflow.sklearn.log_model(model, "model")
+# Logging ke MLflow
+mlflow.log_param("model_type", "LinearRegression")
+mlflow.log_metric("rmse", rmse)
 
-    print("RMSE:", rmse)
+mlflow.sklearn.log_model(model, "model")
+
+print("RMSE:", rmse)
