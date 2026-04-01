@@ -9,20 +9,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Run actions/checkout@v3
+      uses: actions/checkout@v3
 
-    - uses: actions/setup-python@v4
+    - name: Set up Python 3.12.7
+      uses: actions/setup-python@v4
       with:
         python-version: "3.12"
 
-    - run: pip install --upgrade pip
-    - run: pip install mlflow pandas scikit-learn
+    - name: Check Env
+      run: |
+        python --version
+        pip --version
 
-    - run: |
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install mlflow pandas scikit-learn
+
+    - name: Set MLflow Tracking URI
+      run: |
+        # Membuat folder mlruns jika belum ada agar tidak error saat upload
+        mkdir -p MLProject/mlruns
+        export MLFLOW_TRACKING_URI=mlruns
+
+    - name: Run mlflow project
+      run: |
         cd MLProject
         mlflow run . --env-manager=local
 
-    - uses: actions/upload-artifact@v4
+    - name: Upload to GitHub
+      uses: actions/upload-artifact@v4
       with:
-        name: model
-        path: MLProject/mlruns
+        name: trained-model
+        path: MLProject/mlruns/
